@@ -148,8 +148,12 @@ class signalClass(object):
                    self.signalClear()
                 elif (not self.blocksUnAllocated(blocks)) and self.blocksUnOccupied(blocks): #If some allocated, but all unoccupied
                    #Unallocate all blocks allocated by the signal   
-                    self.blocksDeAllocate(blocks) 
+                    result = self.blocksDeAllocate(blocks)
                     self.signalHold()
+
+                    if not result: #Means atleast one block couldn't be deallocated because it was allocated by a different sourcemast
+                        showErrorMessage('Unable to Allocate', 'Unable to Allocate All Blocks for %s (Some blocks allocated by different signal mast)' %self.sourceMastName)
+
                 else:
                     self.signalHold()
                     showErrorMessage('Unable to Allocate', 'Unable to Allocate %s (Blocks not all free or Turnout in Local Mode)' %self.sourceMastName)
@@ -161,7 +165,9 @@ class signalClass(object):
                    #Hold Signal (Turn Red)
                    self.signalHold()
                    #DeAllocate Blocks
-                   self.blocksDeAllocate(blocks) 
+                   result = self.blocksDeAllocate(blocks) 
+                   if not result: #Means atleast one block couldn't be deallocated because it was allocated by a different sourcemast
+                        showErrorMessage('Unable to DeAllocate', 'Unable to DeAllocate All Blocks for %s (Some blocks allocated by different signal mast)' %self.sourceMastName)
                 else: #Maintain signal as cleared
                    self.signalClear()
          else: #No result found
@@ -182,11 +188,20 @@ class signalClass(object):
 
 
     def blocksDeAllocate(self, blocks):
+        #Returns False if any of blocks to be Deallocated were allocated by different signal mast
          logging.debug('blocksDeAllocate')
+         result = True #Assume DeAllocate successful
          for block in blocks:
             #If block is allocated by sourceMast then deAllocate
             if block_dict[block['block']].isAllocated() == self.sourceMastName:
                 block_dict[block['block']].deAllocated()
+            elif block_dict[block['block']].isAllocated():
+                #If block allocated by different source signal mast
+                result = False
+
+         return result
+
+
 
     def blocksAllocate(self, blocks):
          logging.debug('blocksDeAllocate')

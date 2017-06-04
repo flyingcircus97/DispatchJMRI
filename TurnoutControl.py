@@ -34,7 +34,8 @@ class turnoutClass(object):
          self.m.setClass(self)
          self.turnout.addPropertyChangeListener(self.m)
          self.control.addPropertyChangeListener(self.m)
-         self.turnoutPos = 2 #??
+         self.turnoutPos = self.turnout.getKnownState() #Initalize TurnoutPos
+         
          #Block List
          self.block_list = []
          for b in blockList:
