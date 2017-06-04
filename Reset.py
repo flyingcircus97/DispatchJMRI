@@ -1,8 +1,11 @@
 import logging
 
 logging.info("Resetting / Disabling Dispatch Code")
-signalDone()
-turnoutsDone()
-blocksDone()
+try:
+	signalDone()
+	turnoutsDone()
+	blocksDone()
+except: 
+	logging.info("Unable to Reset Code")
 
 logging.info("Resetting Code Complete")

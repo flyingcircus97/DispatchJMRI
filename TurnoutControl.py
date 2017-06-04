@@ -67,8 +67,12 @@ class turnoutClass(object):
          if event.source.userName == self.controlUserName:
                if event.propertyName == 'KnownState':
                    if event.newValue == 2: #Active
-                       if not self.getLocal() and not self.getOccupiedAllocated(): self.changeTurnout() #Disable switch if turnout in local control or allocated/occupied
-                       self.control.setKnownState(self.control.INACTIVE)
+                        self.control.setKnownState(self.control.INACTIVE)
+                        if not self.getLocal() and not self.getOccupiedAllocated():
+                            self.changeTurnout() #Disable switch if turnout in local control or allocated/occupied
+                        else:
+                            showErrorMessage('Unable to Change Turnout', 'Unable to Change Turnout %s (Turnout either occupied or in local control)' %self.turnoutUserName)
+                        
          #Check to see if turnout moved
          elif event.source.userName == self.turnoutUserName:
             if event.propertyName == 'CommandedState':

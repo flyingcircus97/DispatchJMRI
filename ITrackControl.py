@@ -26,7 +26,7 @@ class AllocateBlock(java.beans.PropertyChangeListener):
          self.allocated = None
          #self.listen = AllocateBlockListener()
          self.blockSensor = self.block.getSensor()
-         self.block.getSensor().addPropertyChangeListener(self)
+         if self.blockSensor: self.block.getSensor().addPropertyChangeListener(self)
 
      def addWidget(self, widget):
          #Used to add multiple track segments to the same "block"
@@ -69,7 +69,10 @@ class AllocateBlock(java.beans.PropertyChangeListener):
                    pass
    
      def done(self):
-         self.block.getSensor().removePropertyChangeListener(self)
+         if self.block:
+            self.deAllocated()
+            if self.block.getSensor():
+                self.block.getSensor().removePropertyChangeListener(self)
         
 
 
@@ -77,7 +80,7 @@ def loadWidgets():
     widget_list = []
     turnout_list = {}
     l = jmri.jmrit.display.PanelMenu.instance().getEditorPanelList()
-    print l
+    #print l
     for i in l:
        if (isinstance(i, jmri.jmrit.display.controlPanelEditor.ControlPanelEditor)):
            #pane = i.getComponents()[0]
@@ -105,7 +108,7 @@ def loadWidgets():
                         #print 'Turnout List Add', turnout_name
                         sensor_name = widget.getOccSensor().getUserName()
                         #print 'Sensor', sensor_name
-                        if turnout_name in ['DNT-N', 'NPT-W']: #Temp for testing only load in 2 turnouts
+                        if turnout_name:# in ['DNT-N', 'NPT-W']: #Temp for testing only load in 2 turnouts
                             if turnout_name in turnout_list:
                                 turnout_list[turnout_name].append(sensor_name)
                             else: turnout_list[turnout_name] = [sensor_name]

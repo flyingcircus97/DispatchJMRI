@@ -33,8 +33,9 @@ class signalClass(object):
          self.sourceMast = self.signalLogic.getSourceMast()
          self.sourceMastName = self.sourceMast.getDisplayName()
          #Control sensor - will match held status.
-         self.controlUserName = self.sourceMastName + '_S' #Add underscore S to find sensor name that controls signalMast on dispatcher screen
-         self.control = sensors.provideSensor(self.controlUserName)
+         self.controlUserName = self.sourceMastName + '-HOLD' #Add underscore S to find sensor name that controls signalMast on dispatcher screen
+         #print self.controlUserName
+         self.control = sensors.getSensor(self.controlUserName)
 
     #Initalize singal to held
          self.signalHold()
@@ -103,8 +104,8 @@ class signalClass(object):
             if match: 
                 result = destmast #Assume only one matching destination with sensor / turnout combination
                 logging.info('DestMast Match - %s', result.getUserName())
-        if not result: #No path found for any destination mast
-            showInfoMessage('No Path Found', 'No Path Found for SignalMast %s' %self.sourceMastName)
+        #if not result: #No path found for any destination mast
+         
              
 
         return result   
@@ -145,13 +146,14 @@ class signalClass(object):
                    self.blocksAllocate(blocks)
                    #Unhold (clear signal)
                    self.signalClear()
-                elif self.blocksUnOccupied(blocks): #If some allocated, but all unoccupied
+                elif (not self.blocksUnAllocated(blocks)) and self.blocksUnOccupied(blocks): #If some allocated, but all unoccupied
                    #Unallocate all blocks allocated by the signal   
                     self.blocksDeAllocate(blocks) 
                     self.signalHold()
                 else:
-                    showErrorMessage('Unable to Allocate', 'Unable to Allocate %s (Blocks not all free)' %self.sourceMastName)
                     self.signalHold()
+                    showErrorMessage('Unable to Allocate', 'Unable to Allocate %s (Blocks not all free or Turnout in Local Mode)' %self.sourceMastName)
+                    
             elif not self.sourceMast.getHeld() and event.newValue==4: #Signal Not Held and newvalue is hold/red
             
                 #If blocks allocted by signal > 1 and the all blocks are unoccupied
@@ -162,6 +164,10 @@ class signalClass(object):
                    self.blocksDeAllocate(blocks) 
                 else: #Maintain signal as cleared
                    self.signalClear()
+         else: #No result found
+            self.signalHold()
+            if event.newValue==2: #Only show message once on switch to clear
+                showInfoMessage('No Path Found', 'No Path Found for SignalMast %s' %self.sourceMastName)
                       
             
              
@@ -195,11 +201,13 @@ class signalClass(object):
         return (self.blocksUnAllocated(blocks) and self.blocksUnOccupied(blocks) and self.turnoutsNonLocal(turnout_list))
 
     def blocksUnAllocated(self, blocks):
-        #Checks if all blocks are unallocated
+        #Checks 'if all blocks are unallocated
         # -- UnAllocated, UnOccupied, NotLocal Control
         result = True
         for block in blocks:
-            if block['allocated'] != None: result=False #Already Allocated
+            if block['allocated'] != None: 
+                result=False #Already Allocated
+                logging.debug('Block %s is Already Allocated', block['block'])
 
         return result
 
@@ -207,7 +215,9 @@ class signalClass(object):
         #Checks if all blocks are occupied
         result = True
         for block in blocks:
-            if block['state'] == 2: result=False #Occupied
+            if block['state'] == 2:
+               result=False #Occupied
+               logging.debug('Block %s in Local Control', block.getUserName())
             #Future Get local controlif block['']
 
         return result
@@ -216,7 +226,10 @@ class signalClass(object):
         #Checks if all turnouts are non local
         result = True
         for t in turnout_list:
-            if t['local'] == 2: result=False #Occupied
+            if t['local'] == 2:
+                result=False #Local Control
+                logging.debug('Turnout %s in Local Control', t['turnout'])
+
             #Future Get local controlif block['']
 
         return result
@@ -243,9 +256,11 @@ class signalClass(object):
     def done(self): #Used to easily remove listener so code can be reloaded during testing
          logging.debug('Remove Signal Listener - %s', self.sourceMastName)
          self.control.removePropertyChangeListener(self.m)
+         #Set signel back to clear
+         self.signalClear()
          for destmast in self.signalLogic.getDestinationList().toArray():
-             for b in self.signalLogic.getBlocks(destmast).toArray():
-                 b.removePropertyChangeListener(self.m)
+            for b in self.signalLogic.getBlocks(destmast).toArray():
+                b.removePropertyChangeListener(self.m)
 
 def signalDone():
       logging.debug('Unload / Disable Signal Code')
@@ -269,6 +284,7 @@ masterMastList = []
 for x in mastlogiclist:
     sourcemast = x.getSourceMast().getDisplayName()
     #print sourcemast
-    if sourcemast in ['NPT-W_A']:
+    #if ('virtual' not in sourcemast.lower()) and (sourcemast[:3] != 'SGN'): #Don't initalize virutal mast or permissive signals
+    if ('virtual' not in sourcemast.lower()): #Don't initalize virutal mast
         logging.debug('Initializing - %s', sourcemast)
         masterMastList.append(signalClass(x))
