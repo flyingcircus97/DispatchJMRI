@@ -36,6 +36,7 @@ class signalClass(object):
          self.controlUserName = self.sourceMastName + '-HOLD' #Add underscore S to find sensor name that controls signalMast on dispatcher screen
          #print self.controlUserName
          self.control = sensors.getSensor(self.controlUserName)
+         self.direction = self.calcDirection()
 
     #Initalize singal to held
          self.signalHold()
@@ -204,9 +205,9 @@ class signalClass(object):
 
 
     def blocksAllocate(self, blocks):
-         logging.debug('blocksDeAllocate')
+         logging.debug('blocksAllocate')
          for block in blocks:
-             block_dict[block['block']].setAllocated(self.sourceMastName)
+             block_dict[block['block']].setAllocated(self.sourceMastName, self.direction)
 
 
     def blocksFree(self, blocks, turnout_list):
@@ -276,6 +277,16 @@ class signalClass(object):
          for destmast in self.signalLogic.getDestinationList().toArray():
             for b in self.signalLogic.getBlocks(destmast).toArray():
                 b.removePropertyChangeListener(self.m)
+
+    def calcDirection(self):
+        #Determine if signal face right or left on panel
+        name = self.sourceMastName
+        left = False #Assume right 
+        if name in signalMast_list:
+            deg = signalMast_list[name].getDegrees()
+            if deg == 270: left = True #Left
+
+        return left
 
 def signalDone():
       logging.debug('Unload / Disable Signal Code')

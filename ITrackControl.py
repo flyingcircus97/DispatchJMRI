@@ -27,7 +27,7 @@ class AllocateBlock(java.beans.PropertyChangeListener):
          #self.listen = AllocateBlockListener()
          self.blockSensor = self.block.getSensor()
          if self.blockSensor: self.block.getSensor().addPropertyChangeListener(self)
-
+         
      def addWidget(self, widget):
          #Used to add multiple track segments to the same "block"
          if (isinstance(widget, jmri.jmrit.display.IndicatorTrackIcon)):
@@ -36,15 +36,22 @@ class AllocateBlock(java.beans.PropertyChangeListener):
             self.turnoutWidget.append(widget)
 
 
-     def setAllocated(self, signalName):
+     def setAllocated(self, signalName, direction):
          self.allocated = signalName
          logging.info("Allocated Block %s by signal - %s", self.name, signalName)
          #Allocate all Track Segments (turn green)
          for widget in self.trackWidget:
-             widget.displayState("AllocatedTrack")
+             if direction:
+                widget.displayState("PositionTrack")
+             else:
+                widget.displayState("AllocatedTrack")
          #Allocate all Turnouts (turn green)
          for widget in self.turnoutWidget:
-             widget.setIcon(widget.getIcon("AllocatedTrack",widget.getTurnout().getKnownState()))
+             if direction:
+                widget.setIcon(widget.getIcon("Position Track",widget.getTurnout().getKnownState()))
+             else:
+                widget.setIcon(widget.getIcon("AllocatedTrack",widget.getTurnout().getKnownState()))
+
          
 
      def deAllocated(self):
@@ -78,6 +85,7 @@ class AllocateBlock(java.beans.PropertyChangeListener):
 
 def loadWidgets():
     widget_list = []
+    signal_list = {}
     turnout_list = {}
     l = jmri.jmrit.display.PanelMenu.instance().getEditorPanelList()
     #print l
@@ -114,7 +122,13 @@ def loadWidgets():
                             else: turnout_list[turnout_name] = [sensor_name]
 
                          #widget.setIcon(widget.getIcon("AllocatedTrack",widget.getTurnout().getKnownState()))
-    return widget_list, turnout_list
+
+                elif (isinstance(widget, jmri.jmrit.display.SignalMastIcon)):
+                        name = widget.getSignalMast().getUserName()
+                        signal_list[name] = widget
+                        
+
+    return widget_list, turnout_list, signal_list
 
 def createBlocks(widgets):
     
@@ -137,7 +151,7 @@ def blocksDone():
        logging.debug('Remove Listener to Block: %r', block)
 logging.info("Start ITrackControl.py")
 block_dict = {}
-widgets, turnout_list = loadWidgets()
+widgets, turnout_list, signalMast_list = loadWidgets()
 createBlocks(widgets)
 #print block_dict
 
