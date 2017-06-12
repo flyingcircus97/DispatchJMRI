@@ -51,7 +51,10 @@ def initTurnout(turnout):
 
 def initSensor(sensor):
     s = sensors.provideSensor(sensor)
-    s.setKnownState(INACTIVE) #4 = inactive
+    if sensor[-5:]=='-HOLD': #If sensor is turnout sensor, initalize as active (green)
+      s.setKnownState(ACTIVE) 
+    else:
+      s.setKnownState(INACTIVE) #4 = inactive
     #Add listener if sensors ends with _S (Turnout switch)
     if sensor[-2:]=='_S':
       s.addPropertyChangeListener(nonDispatchListener)

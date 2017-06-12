@@ -285,6 +285,8 @@ class signalClass(object):
         if name in signalMast_list:
             deg = signalMast_list[name].getDegrees()
             if deg == 270: left = True #Left
+            if 'HEL_C' in name: #Invert if Helix C signal (Due to helix being in two spots in the panel, going opposite directions)
+                left = not left 
 
         return left
 

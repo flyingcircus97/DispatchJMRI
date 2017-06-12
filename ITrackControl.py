@@ -40,6 +40,10 @@ class AllocateBlock(java.beans.PropertyChangeListener):
          self.allocated = signalName
          logging.info("Allocated Block %s by signal - %s", self.name, signalName)
          #Allocate all Track Segments (turn green)
+         #Invert Direction for special case - Needed for Helix to show correct on panel for direction arrow
+         if (self.name in ['Block 79', 'Block 146']) and ('HEL' in signalName):
+            direction = not direction
+            
          for widget in self.trackWidget:
              if direction:
                 widget.displayState("PositionTrack")
@@ -47,8 +51,9 @@ class AllocateBlock(java.beans.PropertyChangeListener):
                 widget.displayState("AllocatedTrack")
          #Allocate all Turnouts (turn green)
          for widget in self.turnoutWidget:
-             if direction:
-                widget.setIcon(widget.getIcon("Position Track",widget.getTurnout().getKnownState()))
+             #print widget.getDegrees() 
+             if direction == (widget.getDegrees()==0):
+                widget.setIcon(widget.getIcon("PositionTrack",widget.getTurnout().getKnownState()))
              else:
                 widget.setIcon(widget.getIcon("AllocatedTrack",widget.getTurnout().getKnownState()))
 
