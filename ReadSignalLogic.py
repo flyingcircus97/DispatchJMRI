@@ -36,6 +36,7 @@ class signalClass(object):
          self.controlUserName = self.sourceMastName + '-HOLD' #Add underscore S to find sensor name that controls signalMast on dispatcher screen
          #print self.controlUserName
          self.control = sensors.getSensor(self.controlUserName)
+         self.direction = self.calcDirection()
 
     #Initalize singal to held
          self.signalHold()
@@ -148,8 +149,15 @@ class signalClass(object):
                    self.signalClear()
                 elif (not self.blocksUnAllocated(blocks)) and self.blocksUnOccupied(blocks): #If some allocated, but all unoccupied
                    #Unallocate all blocks allocated by the signal   
-                    self.blocksDeAllocate(blocks) 
+                    result = self.blocksDeAllocate(blocks)
                     self.signalHold()
+
+                    if not result: #Means atleast one block couldn't be deallocated because it was allocated by a different sourcemast
+                        showErrorMessage('Unable to Allocate', 'Unable to Allocate All Blocks for %s (Some blocks allocated by different signal mast)' %self.sourceMastName)
+
+                elif (not self.blocksUnAllocated(blocks)): #If some allocated but block occupied, just try to deallocate them, show no warning
+                    result = self.blocksDeAllocate(blocks)
+                    self.signalHold()                
                 else:
                     self.signalHold()
                     showErrorMessage('Unable to Allocate', 'Unable to Allocate %s (Blocks not all free or Turnout in Local Mode)' %self.sourceMastName)
@@ -161,7 +169,9 @@ class signalClass(object):
                    #Hold Signal (Turn Red)
                    self.signalHold()
                    #DeAllocate Blocks
-                   self.blocksDeAllocate(blocks) 
+                   result = self.blocksDeAllocate(blocks) 
+                   if not result: #Means atleast one block couldn't be deallocated because it was allocated by a different sourcemast
+                        showErrorMessage('Unable to DeAllocate', 'Unable to DeAllocate All Blocks for %s (Some blocks allocated by different signal mast)' %self.sourceMastName)
                 else: #Maintain signal as cleared
                    self.signalClear()
          else: #No result found
@@ -182,16 +192,25 @@ class signalClass(object):
 
 
     def blocksDeAllocate(self, blocks):
+        #Returns False if any of blocks to be Deallocated were allocated by different signal mast
          logging.debug('blocksDeAllocate')
+         result = True #Assume DeAllocate successful
          for block in blocks:
             #If block is allocated by sourceMast then deAllocate
             if block_dict[block['block']].isAllocated() == self.sourceMastName:
                 block_dict[block['block']].deAllocated()
+            elif block_dict[block['block']].isAllocated():
+                #If block allocated by different source signal mast
+                result = False
+
+         return result
+
+
 
     def blocksAllocate(self, blocks):
-         logging.debug('blocksDeAllocate')
+         logging.debug('blocksAllocate')
          for block in blocks:
-             block_dict[block['block']].setAllocated(self.sourceMastName)
+             block_dict[block['block']].setAllocated(self.sourceMastName, self.direction)
 
 
     def blocksFree(self, blocks, turnout_list):
@@ -217,7 +236,7 @@ class signalClass(object):
         for block in blocks:
             if block['state'] == 2:
                result=False #Occupied
-               logging.debug('Block %s in Local Control', block.getUserName())
+               logging.debug('Block %s in Local Control', block['block'])
             #Future Get local controlif block['']
 
         return result
@@ -262,6 +281,18 @@ class signalClass(object):
             for b in self.signalLogic.getBlocks(destmast).toArray():
                 b.removePropertyChangeListener(self.m)
 
+    def calcDirection(self):
+        #Determine if signal face right or left on panel
+        name = self.sourceMastName
+        left = False #Assume right 
+        if name in signalMast_list:
+            deg = signalMast_list[name].getDegrees()
+            if deg == 270: left = True #Left
+            if 'HEL_C' in name: #Invert if Helix C signal (Due to helix being in two spots in the panel, going opposite directions)
+                left = not left 
+
+        return left
+
 def signalDone():
       logging.debug('Unload / Disable Signal Code')
       #print masterMastList
@@ -285,6 +316,6 @@ for x in mastlogiclist:
     sourcemast = x.getSourceMast().getDisplayName()
     #print sourcemast
     #if ('virtual' not in sourcemast.lower()) and (sourcemast[:3] != 'SGN'): #Don't initalize virutal mast or permissive signals
-    if ('virtual' not in sourcemast.lower()): #Don't initalize virutal mast
+    if ('virtual' not in sourcemast.lower()) and (sourcemast not in ['SGN-4N', 'MDT-2_A']): #Don't initalize virutal mast
         logging.debug('Initializing - %s', sourcemast)
         masterMastList.append(signalClass(x))

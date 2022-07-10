@@ -27,7 +27,7 @@ class AllocateBlock(java.beans.PropertyChangeListener):
          #self.listen = AllocateBlockListener()
          self.blockSensor = self.block.getSensor()
          if self.blockSensor: self.block.getSensor().addPropertyChangeListener(self)
-
+         
      def addWidget(self, widget):
          #Used to add multiple track segments to the same "block"
          if (isinstance(widget, jmri.jmrit.display.IndicatorTrackIcon)):
@@ -36,15 +36,27 @@ class AllocateBlock(java.beans.PropertyChangeListener):
             self.turnoutWidget.append(widget)
 
 
-     def setAllocated(self, signalName):
+     def setAllocated(self, signalName, direction):
          self.allocated = signalName
          logging.info("Allocated Block %s by signal - %s", self.name, signalName)
          #Allocate all Track Segments (turn green)
+         #Invert Direction for special case - Needed for Helix to show correct on panel for direction arrow
+         if (self.name in ['Block 79', 'Block 146']) and ('HEL' in signalName):
+            direction = not direction
+            
          for widget in self.trackWidget:
-             widget.displayState("AllocatedTrack")
+             if direction:
+                widget.displayState("PositionTrack")
+             else:
+                widget.displayState("AllocatedTrack")
          #Allocate all Turnouts (turn green)
          for widget in self.turnoutWidget:
-             widget.setIcon(widget.getIcon("AllocatedTrack",widget.getTurnout().getKnownState()))
+             #print widget.getDegrees() 
+             if direction == (widget.getDegrees()==0):
+                widget.setIcon(widget.getIcon("PositionTrack",widget.getTurnout().getKnownState()))
+             else:
+                widget.setIcon(widget.getIcon("AllocatedTrack",widget.getTurnout().getKnownState()))
+
          
 
      def deAllocated(self):
@@ -78,6 +90,7 @@ class AllocateBlock(java.beans.PropertyChangeListener):
 
 def loadWidgets():
     widget_list = []
+    signal_list = {}
     turnout_list = {}
     l = jmri.jmrit.display.PanelMenu.instance().getEditorPanelList()
     #print l
@@ -108,13 +121,21 @@ def loadWidgets():
                         #print 'Turnout List Add', turnout_name
                         sensor_name = widget.getOccSensor().getUserName()
                         #print 'Sensor', sensor_name
-                        if turnout_name:# in ['DNT-N', 'NPT-W']: #Temp for testing only load in 2 turnouts
+                        if turnout_name not in ['MDT-2']: #Disable MDT-2 Only
                             if turnout_name in turnout_list:
                                 turnout_list[turnout_name].append(sensor_name)
                             else: turnout_list[turnout_name] = [sensor_name]
 
                          #widget.setIcon(widget.getIcon("AllocatedTrack",widget.getTurnout().getKnownState()))
-    return widget_list, turnout_list
+
+                elif (isinstance(widget, jmri.jmrit.display.SignalMastIcon)):
+                        
+                        name = widget.getSignalMast().getUserName()
+                        #if name not in ['SGN-4N','MDT-2_A']: #Remove signals down mountain from Elkhorn leave ABS always even in dispatch mode.
+                        signal_list[name] = widget
+                        
+
+    return widget_list, turnout_list, signal_list
 
 def createBlocks(widgets):
     
@@ -137,7 +158,7 @@ def blocksDone():
        logging.debug('Remove Listener to Block: %r', block)
 logging.info("Start ITrackControl.py")
 block_dict = {}
-widgets, turnout_list = loadWidgets()
+widgets, turnout_list, signalMast_list = loadWidgets()
 createBlocks(widgets)
 #print block_dict
 
