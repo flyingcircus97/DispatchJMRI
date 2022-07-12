@@ -12347,6 +12347,40 @@
     </signalmastlogic>
     <signalmastlogic source="HUN-1A_A">
       <sourceSignalMast>HUN-1A_A</sourceSignalMast>
+      <destinationMast destination="HUN-2B_B">
+        <destinationSignalMast>HUN-2B_B</destinationSignalMast>
+        <comment />
+        <enabled>yes</enabled>
+        <allowAutoMaticSignalMastGeneration>no</allowAutoMaticSignalMastGeneration>
+        <useLayoutEditor>no</useLayoutEditor>
+        <useLayoutEditorTurnouts>yes</useLayoutEditorTurnouts>
+        <useLayoutEditorBlocks>yes</useLayoutEditorBlocks>
+        <lockTurnouts>no</lockTurnouts>
+        <blocks>
+          <block>
+            <blockName>Block 49</blockName>
+            <blockState>unoccupied</blockState>
+          </block>
+          <block>
+            <blockName>Block 48</blockName>
+            <blockState>unoccupied</blockState>
+          </block>
+          <block>
+            <blockName>Block 47</blockName>
+            <blockState>unoccupied</blockState>
+          </block>
+        </blocks>
+        <turnouts>
+          <turnout>
+            <turnoutName>HUN-1A</turnoutName>
+            <turnoutState>thrown</turnoutState>
+          </turnout>
+          <turnout>
+            <turnoutName>HUN-2A</turnoutName>
+            <turnoutState>thrown</turnoutState>
+          </turnout>
+        </turnouts>
+      </destinationMast>
       <destinationMast destination="HUNCO1-W_A">
         <destinationSignalMast>HUNCO1-W_A</destinationSignalMast>
         <comment />
@@ -12404,40 +12438,6 @@
           <turnout>
             <turnoutName>HUN-2A</turnoutName>
             <turnoutState>closed</turnoutState>
-          </turnout>
-        </turnouts>
-      </destinationMast>
-      <destinationMast destination="HUN-2B_B">
-        <destinationSignalMast>HUN-2B_B</destinationSignalMast>
-        <comment />
-        <enabled>yes</enabled>
-        <allowAutoMaticSignalMastGeneration>no</allowAutoMaticSignalMastGeneration>
-        <useLayoutEditor>no</useLayoutEditor>
-        <useLayoutEditorTurnouts>yes</useLayoutEditorTurnouts>
-        <useLayoutEditorBlocks>yes</useLayoutEditorBlocks>
-        <lockTurnouts>no</lockTurnouts>
-        <blocks>
-          <block>
-            <blockName>Block 49</blockName>
-            <blockState>unoccupied</blockState>
-          </block>
-          <block>
-            <blockName>Block 48</blockName>
-            <blockState>unoccupied</blockState>
-          </block>
-          <block>
-            <blockName>Block 47</blockName>
-            <blockState>unoccupied</blockState>
-          </block>
-        </blocks>
-        <turnouts>
-          <turnout>
-            <turnoutName>HUN-1A</turnoutName>
-            <turnoutState>thrown</turnoutState>
-          </turnout>
-          <turnout>
-            <turnoutName>HUN-2A</turnoutName>
-            <turnoutState>thrown</turnoutState>
           </turnout>
         </turnouts>
       </destinationMast>
@@ -14577,17 +14577,7 @@
             <blockName>Block 123</blockName>
             <blockState>unoccupied</blockState>
           </block>
-          <block>
-            <blockName>Block 124</blockName>
-            <blockState>unoccupied</blockState>
-          </block>
         </blocks>
-        <turnouts>
-          <turnout>
-            <turnoutName>JCY-LOOP</turnoutName>
-            <turnoutState>closed</turnoutState>
-          </turnout>
-        </turnouts>
       </destinationMast>
     </signalmastlogic>
     <signalmastlogic source="KSP-Y2_C">
@@ -17571,7 +17561,7 @@
       </iconmap>
       <paths />
     </indicatortrackicon>
-    <indicatorturnouticon x="1795" y="160" level="7" forcecontroloff="true" hidden="no" positionable="true" showtooltip="true" editable="false" class="jmri.jmrit.display.configurexml.IndicatorTurnoutIconXml">
+    <indicatorturnouticon x="1795" y="160" level="7" forcecontroloff="false" hidden="no" positionable="true" showtooltip="true" editable="false" class="jmri.jmrit.display.configurexml.IndicatorTurnoutIconXml">
       <tooltip>ITrack JCY-LOOP (LT55) on Block 124</tooltip>
       <turnout>LT55</turnout>
       <occupancysensor>Block 124</occupancysensor>
@@ -18829,7 +18819,7 @@
     <signalmasticon signalmast="JCY-LOOP_A" x="1761" y="226" level="9" forcecontroloff="true" hidden="no" positionable="true" showtooltip="true" editable="false" degrees="90" clickmode="0" litmode="false" scale="1.0" imageset="default" class="jmri.jmrit.display.configurexml.SignalMastIconXml">
       <tooltip>JCY-LOOP_A (IF$shsm:bmrc:two-searchlight3over2(JCY-LOOP_A1)(JCY-LOOP_A2))</tooltip>
     </signalmasticon>
-    <signalmasticon signalmast="JCY-LOOP_B" x="1836" y="195" level="9" forcecontroloff="true" hidden="no" positionable="true" showtooltip="true" editable="false" degrees="270" clickmode="0" litmode="false" scale="1.0" imageset="default" class="jmri.jmrit.display.configurexml.SignalMastIconXml">
+    <signalmasticon signalmast="JCY-LOOP_B" x="1758" y="194" level="9" forcecontroloff="true" hidden="no" positionable="true" showtooltip="true" editable="false" degrees="270" clickmode="0" litmode="false" scale="1.0" imageset="default" class="jmri.jmrit.display.configurexml.SignalMastIconXml">
       <tooltip>JCY-LOOP_B (IF$shsm:bmrc:one-searchlight(JCY-LOOP_B))</tooltip>
     </signalmasticon>
     <indicatortrackicon x="1839" y="208" level="7" forcecontroloff="false" hidden="no" positionable="true" showtooltip="true" editable="false" class="jmri.jmrit.display.configurexml.IndicatorTrackIconXml">
@@ -18884,23 +18874,7 @@
       </iconmap>
       <paths />
     </indicatortrackicon>
-    <sensoricon sensor="JCY-LOOP_A-HOLD" x="1755" y="225" level="10" forcecontroloff="false" hidden="no" positionable="true" showtooltip="true" editable="false" momentary="false" icon="yes" class="jmri.jmrit.display.configurexml.SensorIconXml">
-      <tooltip>JCY-LOOP_A-HOLD (ISJCY-LOOP_A-HOLD)</tooltip>
-      <active url="preference:resources/controlPanel/signal/greenTriangle.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </active>
-      <inactive url="preference:resources/controlPanel/signal/redTriangle.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </inactive>
-      <unknown url="preference:resources/controlPanel/signal/placementTriangle.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </unknown>
-      <inconsistent url="preference:resources/controlPanel/signal/placementTriangle.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </inconsistent>
-      <iconmaps family="SignalHold" />
-    </sensoricon>
-    <sensoricon sensor="JCY-LOOP_B-HOLD" x="1829" y="194" level="10" forcecontroloff="false" hidden="no" positionable="true" showtooltip="true" editable="false" degrees="180" momentary="false" icon="yes" class="jmri.jmrit.display.configurexml.SensorIconXml">
+    <sensoricon sensor="JCY-LOOP_B-HOLD" x="1750" y="192" level="10" forcecontroloff="false" hidden="no" positionable="true" showtooltip="true" editable="false" degrees="180" momentary="false" icon="yes" class="jmri.jmrit.display.configurexml.SensorIconXml">
       <tooltip>JCY-LOOP_B-HOLD (ISJCY-LOOP_B-HOLD)</tooltip>
       <active url="preference:resources/controlPanel/signal/greenTriangle.gif" degrees="180" scale="1.0">
         <rotation>0</rotation>
@@ -18915,38 +18889,6 @@
         <rotation>0</rotation>
       </inconsistent>
       <iconmaps family="SignalHold" />
-    </sensoricon>
-    <sensoricon sensor="JCY-LOOP_S" x="1795" y="195" level="10" forcecontroloff="false" hidden="no" positionable="true" showtooltip="true" editable="false" momentary="false" icon="yes" class="jmri.jmrit.display.configurexml.SensorIconXml">
-      <tooltip>JCY-LOOP_S (ISJCY-LOOP_S)</tooltip>
-      <active url="preference:resources/controlPanel/turnout/turnout_toggle.png" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </active>
-      <inactive url="preference:resources/controlPanel/turnout/turnout_transparent.png" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </inactive>
-      <unknown url="preference:resources/controlPanel/turnout/turnout_place.png" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </unknown>
-      <inconsistent url="preference:resources/controlPanel/turnout/turnout_transparent.png" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </inconsistent>
-      <iconmaps family="Turnout Control" />
-    </sensoricon>
-    <sensoricon sensor="JCY-LOOP_LOCAL" x="1795" y="172" level="10" forcecontroloff="false" hidden="no" positionable="true" showtooltip="true" editable="false" momentary="false" icon="yes" class="jmri.jmrit.display.configurexml.SensorIconXml">
-      <tooltip>JCY-LOOP_LOCAL (ISJCY-LOOP_LOCAL)</tooltip>
-      <active url="preference:resources/controlPanel/turnout/blueSquare.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </active>
-      <inactive url="preference:resources/controlPanel/turnout/blueTransparent.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </inactive>
-      <unknown url="preference:resources/controlPanel/turnout/blueTransparent.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </unknown>
-      <inconsistent url="preference:resources/controlPanel/turnout/blueTransparent.gif" degrees="0" scale="1.0">
-        <rotation>0</rotation>
-      </inconsistent>
-      <iconmaps family="LocalControl" />
     </sensoricon>
     <indicatortrackicon x="136" y="573" level="7" forcecontroloff="false" hidden="no" positionable="true" showtooltip="false" editable="false" class="jmri.jmrit.display.configurexml.IndicatorTrackIconXml">
       <tooltip>ITrack on Block 1</tooltip>
@@ -28393,104 +28335,104 @@
   <filehistory>
     <operation>
       <type>app</type>
-      <date>Sun Jul 10 12:02:49 EDT 2022</date>
+      <date>Mon Jul 11 22:20:40 EDT 2022</date>
       <filename>JMRI program</filename>
     </operation>
     <operation>
       <type>Load OK</type>
-      <date>Sun Jul 10 12:02:51 EDT 2022</date>
+      <date>Mon Jul 11 22:20:42 EDT 2022</date>
       <filename>/C:/Users/michael/JMRI/My_JMRI_Railroad/BMRC.xml</filename>
       <filehistory>
         <operation>
           <type>app</type>
-          <date>Sun Jul 10 11:31:27 EDT 2022</date>
+          <date>Mon Jul 11 21:41:36 EDT 2022</date>
           <filename>JMRI program</filename>
         </operation>
         <operation>
           <type>Load OK</type>
-          <date>Sun Jul 10 11:31:29 EDT 2022</date>
+          <date>Mon Jul 11 21:41:38 EDT 2022</date>
           <filename>/C:/Users/michael/JMRI/My_JMRI_Railroad/BMRC.xml</filename>
           <filehistory>
             <operation>
               <type>app</type>
-              <date>Sat Jul 09 20:27:11 EDT 2022</date>
+              <date>Sun Jul 10 12:02:49 EDT 2022</date>
               <filename>JMRI program</filename>
             </operation>
             <operation>
               <type>Load OK</type>
-              <date>Sat Jul 09 20:27:14 EDT 2022</date>
+              <date>Sun Jul 10 12:02:51 EDT 2022</date>
               <filename>/C:/Users/michael/JMRI/My_JMRI_Railroad/BMRC.xml</filename>
               <filehistory>
                 <operation>
                   <type>app</type>
-                  <date>Sat Jul 09 20:25:26 EDT 2022</date>
+                  <date>Sun Jul 10 11:31:27 EDT 2022</date>
                   <filename>JMRI program</filename>
                 </operation>
                 <operation>
                   <type>Load OK</type>
-                  <date>Sat Jul 09 20:25:29 EDT 2022</date>
+                  <date>Sun Jul 10 11:31:29 EDT 2022</date>
                   <filename>/C:/Users/michael/JMRI/My_JMRI_Railroad/BMRC.xml</filename>
                   <filehistory>
                     <operation>
                       <type>app</type>
-                      <date>Sat Jul 09 19:55:28 EDT 2022</date>
+                      <date>Sat Jul 09 20:27:11 EDT 2022</date>
                       <filename>JMRI program</filename>
                     </operation>
                     <operation>
                       <type>Load OK</type>
-                      <date>Sat Jul 09 19:55:32 EDT 2022</date>
+                      <date>Sat Jul 09 20:27:14 EDT 2022</date>
                       <filename>/C:/Users/michael/JMRI/My_JMRI_Railroad/BMRC.xml</filename>
                       <filehistory>
                         <operation>
                           <type>app</type>
-                          <date>Sat Jul 09 19:45:20 EDT 2022</date>
+                          <date>Sat Jul 09 20:25:26 EDT 2022</date>
                           <filename>JMRI program</filename>
                         </operation>
                         <operation>
                           <type>Load OK</type>
-                          <date>Sat Jul 09 19:45:23 EDT 2022</date>
+                          <date>Sat Jul 09 20:25:29 EDT 2022</date>
                           <filename>/C:/Users/michael/JMRI/My_JMRI_Railroad/BMRC.xml</filename>
                         </operation>
                         <operation>
                           <type>Store</type>
-                          <date>Sat Jul 09 19:51:10 EDT 2022</date>
+                          <date>Sat Jul 09 20:27:04 EDT 2022</date>
                           <filename />
                         </operation>
                       </filehistory>
                     </operation>
                     <operation>
                       <type>Store</type>
-                      <date>Sat Jul 09 20:25:19 EDT 2022</date>
+                      <date>Sun Jul 10 11:27:32 EDT 2022</date>
                       <filename />
                     </operation>
                   </filehistory>
                 </operation>
                 <operation>
                   <type>Store</type>
-                  <date>Sat Jul 09 20:27:04 EDT 2022</date>
+                  <date>Sun Jul 10 11:58:46 EDT 2022</date>
                   <filename />
                 </operation>
               </filehistory>
             </operation>
             <operation>
               <type>Store</type>
-              <date>Sun Jul 10 11:27:32 EDT 2022</date>
+              <date>Sun Jul 10 13:05:12 EDT 2022</date>
               <filename />
             </operation>
           </filehistory>
         </operation>
         <operation>
           <type>Store</type>
-          <date>Sun Jul 10 11:58:46 EDT 2022</date>
+          <date>Mon Jul 11 22:20:29 EDT 2022</date>
           <filename />
         </operation>
       </filehistory>
     </operation>
     <operation>
       <type>Store</type>
-      <date>Sun Jul 10 13:05:12 EDT 2022</date>
+      <date>Mon Jul 11 22:30:52 EDT 2022</date>
       <filename />
     </operation>
   </filehistory>
-  <!--Written by JMRI version 4.4-R1ccf76b on Sun Jul 10 13:05:12 EDT 2022 $Id$-->
+  <!--Written by JMRI version 4.4-R1ccf76b on Mon Jul 11 22:30:52 EDT 2022 $Id$-->
 </layout-config>

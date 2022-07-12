@@ -121,7 +121,7 @@ def loadWidgets():
                         #print 'Turnout List Add', turnout_name
                         sensor_name = widget.getOccSensor().getUserName()
                         #print 'Sensor', sensor_name
-                        if turnout_name not in ['MDT-2']: #Disable MDT-2 Only
+                        if turnout_name not in ['MDT-2','JCY-LOOP']: #Disable MDT-2 and JCY-LOOP Only
                             if turnout_name in turnout_list:
                                 turnout_list[turnout_name].append(sensor_name)
                             else: turnout_list[turnout_name] = [sensor_name]

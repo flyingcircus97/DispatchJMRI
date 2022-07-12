@@ -316,6 +316,6 @@ for x in mastlogiclist:
     sourcemast = x.getSourceMast().getDisplayName()
     #print sourcemast
     #if ('virtual' not in sourcemast.lower()) and (sourcemast[:3] != 'SGN'): #Don't initalize virutal mast or permissive signals
-    if ('virtual' not in sourcemast.lower()) and (sourcemast not in ['SGN-4N', 'MDT-2_A']): #Don't initalize virutal mast
+    if ('virtual' not in sourcemast.lower()) and (sourcemast not in ['SGN-4N', 'MDT-2_A','JCY-LOOP_A']): #Don't initalize virutal mast
         logging.debug('Initializing - %s', sourcemast)
         masterMastList.append(signalClass(x))
